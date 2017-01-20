@@ -6,7 +6,9 @@
 **         Santiago Gil Begué, NIA: 683482
 ** -------------------------------------------------------------------------*/
 
+#include <suffixTree.hpp>
+
 int main(int argc, char *argv[])
 {
-
+    SuffixTree suffixTree("testing");
 }
