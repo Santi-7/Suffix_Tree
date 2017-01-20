@@ -15,7 +15,7 @@
 struct TreeNode
 {
     // An edge is a char and a pointer to another node.
-    std::vector<std::pair(char, TreeNode*)> edges;
+    std::vector<std::pair<char, TreeNode*>> edges;
 };
 
 class SuffixTree

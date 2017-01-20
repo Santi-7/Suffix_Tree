@@ -15,7 +15,7 @@
 struct TreeNode
 {
     // An edge is a string and a pointer to another node.
-    std::vector<std::pair(std::string, TreeNode *)> edges;
+    std::vector<std::pair<std::string, TreeNode *>> edges;
 };
 
 class CompactSuffixTree
