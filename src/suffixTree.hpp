@@ -23,8 +23,7 @@ struct TreeNode
      */
     TreeNode* InsertEdge(const char edge)
     {
-        TreeNode* connectedNode = new TreeNode;
-        edges.push_back(std::make_pair(edge, connectedNode));
+        edges.push_back(std::make_pair(edge, new TreeNode));
         return edges[edges.size() - 1].second;
     }
 
@@ -37,7 +36,7 @@ struct TreeNode
     bool HasEdge(const char edge, TreeNode* &node)
     {
         // Check all the edges.
-        for (const auto& currentEdge : edges)
+        for (const auto &currentEdge : edges)
         {
             // The edge value is the desired.
             if (currentEdge.first == edge)
