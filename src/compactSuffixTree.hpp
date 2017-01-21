@@ -33,7 +33,7 @@ public:
 private:
 
     /** Root node of the compact suffix tree. */
-    TreeNode mRootNode;
+    TreeNode* mRootNode;
 };
 
 #endif // SUFFIX_TREE_COMPACTSUFFIXTREE_HPP

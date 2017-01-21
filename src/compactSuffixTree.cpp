@@ -7,3 +7,8 @@
 ** -------------------------------------------------------------------------*/
 
 #include "compactSuffixTree.hpp"
+
+CompactSuffixTree::CompactSuffixTree(const std::string &str)
+{
+
+}
