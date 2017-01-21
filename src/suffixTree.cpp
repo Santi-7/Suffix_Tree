@@ -14,6 +14,7 @@ using namespace std;
 
 SuffixTree::SuffixTree(const string &str)
 {
+    mRootNode = new TreeNode;
     // Copy of the parameter.
     string copy = "$" + str + "$";
     // Constructs the tree with all the suffixes of the input string.
@@ -33,7 +34,7 @@ pair<unsigned int, TreeNode*> SuffixTree::GetPathDegree(const string &str) const
 {
     // Return values.
     unsigned int pathIndex = 0;
-    TreeNode* currentNode = &mRootNode;
+    TreeNode* currentNode = mRootNode;
     // We have not analyzed all the string.
     /*
      * This is a private method, and we control all the [str] values. We know

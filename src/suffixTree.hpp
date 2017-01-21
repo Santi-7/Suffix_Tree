@@ -23,9 +23,8 @@ struct TreeNode
      */
     TreeNode* InsertEdge(const char edge)
     {
-        // TODO: This is failing and doing strange things. Fix it.
-        TreeNode connectedNode;
-        edges.emplace_back(std::make_pair(edge, &connectedNode));
+        TreeNode* connectedNode = new TreeNode;
+        edges.push_back(std::make_pair(edge, connectedNode));
         return edges[edges.size() - 1].second;
     }
 
@@ -38,7 +37,7 @@ struct TreeNode
     bool HasEdge(const char edge, TreeNode* &node)
     {
         // Check all the edges.
-        for (auto currentEdge : edges)
+        for (const auto& currentEdge : edges)
         {
             // The edge value is the desired.
             if (currentEdge.first == edge)
@@ -67,7 +66,7 @@ public:
 private:
 
     /** Root node of the suffix tree. */
-    TreeNode mRootNode;
+    TreeNode* mRootNode;
 
     /**
      * @param str String to look for its maximum prefix.
