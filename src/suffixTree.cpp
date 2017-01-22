@@ -14,7 +14,7 @@ using namespace std;
 
 SuffixTree::SuffixTree(const string &str)
 {
-    mRootNode = new TreeNode;
+    mRootNode = new TreeNode(' ');
     // Copy of the parameter.
     string copy = "$" + str + "$";
     // Constructs the tree with all the suffixes of the input string.

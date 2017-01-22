@@ -14,38 +14,43 @@
 
 struct TreeNode
 {
-    // An edge is a char and a pointer to another node.
-    std::vector<std::pair<char, TreeNode*>> edges;
+    char value;
+    std::vector<TreeNode*> children;
 
+    TreeNode(char _value)
+    {
+        value = _value;
+    }
     /**
-     * @param edge to be added to this node.
+     * @param value to be added to this node.
      * @return the node connected to this node by the new edge added.
      */
-    TreeNode* InsertEdge(const char edge)
+    TreeNode* InsertEdge(const char value)
     {
-        edges.push_back(std::make_pair(edge, new TreeNode));
-        return edges[edges.size() - 1].second;
+
+        children.push_back(new TreeNode(value));
+        return children[children.size() - 1];
     }
 
     /**
-     * @param edge value to look for.
+     * @param value value to look for.
      * @param node This parameter will be updated to the node of the tree following
      *  by the desired edge, if it exists.
      * @return True if the edge with the desired value exists, false otherwise.
      */
-    bool HasEdge(const char edge, TreeNode* &node)
+    bool HasEdge(const char value, TreeNode* &node)
     {
-        // Check all the edges.
-        for (const auto &currentEdge : edges)
+        // Check all the children.
+        for (const auto &currentEdge : children)
         {
-            // The edge value is the desired.
-            if (currentEdge.first == edge)
+            // The value value is the desired.
+            if (currentEdge->value == value)
             {
-                node = currentEdge.second;
+                node = currentEdge;
                 return true;
             }
         }
-        // No edge
+        // No value
         return false;
     }
 };
@@ -61,8 +66,6 @@ public:
      * @return
      */
     SuffixTree(const std::string &str);
-
-private:
 
     /** Root node of the suffix tree. */
     TreeNode* mRootNode;
