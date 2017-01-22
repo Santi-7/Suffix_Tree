@@ -7,8 +7,12 @@
 ** -------------------------------------------------------------------------*/
 
 #include <suffixTree.hpp>
+#include <compactSuffixTree.hpp>
 
 int main(int argc, char *argv[])
 {
-    SuffixTree suffixTree("testing");
+    SuffixTree suffixTree("banana");
+
+    CompactSuffixTree compact(suffixTree.mRootNode);
+    compact.Print();
 }
