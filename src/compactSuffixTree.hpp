@@ -11,11 +11,16 @@
 
 #include <string>
 #include <vector>
+#include "suffixTree.hpp"
 
-struct TreeNode
+struct CompactTreeNode
 {
-    // An edge is a string and a pointer to another node.
-    std::vector<std::pair<std::string, TreeNode *>> edges;
+    std::string value;
+    std::vector<CompactTreeNode*> children;
+    CompactTreeNode(std::string _value)
+    {
+        value = _value;
+    }
 };
 
 class CompactSuffixTree
@@ -30,10 +35,14 @@ public:
      */
     CompactSuffixTree(const std::string &str);
 
+    CompactSuffixTree(TreeNode* treeRoot);
+
+    void Print();
+
 private:
 
     /** Root node of the compact suffix tree. */
-    TreeNode* mRootNode;
+    CompactTreeNode* mRootNode;
 };
 
 #endif // SUFFIX_TREE_COMPACTSUFFIXTREE_HPP
