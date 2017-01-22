@@ -8,6 +8,7 @@
 
 #include "compactSuffixTree.hpp"
 #include <iostream>
+#include <algorithm>
 
 using namespace std;
 
@@ -31,7 +32,7 @@ string compact(TreeNode* node)
         retVal += tmpNode->value;
         tmpNode = tmpNode->children[0];
     }
-    if (isCompactable) return retVal;
+    if (isCompactable) return retVal + tmpNode->value;
     else return "";
 };
 
@@ -64,11 +65,29 @@ void PrintFromNode(CompactTreeNode* node)
 {
     if (node->children.size() == 0)
     {
-        cout << "[." << (node->value[0] == '$' ? "\\$" : node->value) << " ]\n";
+        cout << "[.";
+        for (char c : node->value)
+        {
+            if (c == '$')
+            {
+                cout << "\\$";
+            }
+            else cout << c;
+        }
+        cout << " ]\n";
     }
     else
     {
-        cout << "[." << node->value << ' ';
+        cout << "[.";
+        for (char c : node->value)
+        {
+            if (c == '$')
+            {
+                cout << "\\$";
+            }
+            else cout << c;
+        }
+        cout << ' ';
         for (int i = 0; i < node->children.size(); ++i)
         {
             PrintFromNode(node->children[i]);
