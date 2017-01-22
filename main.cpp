@@ -11,8 +11,6 @@
 
 int main(int argc, char *argv[])
 {
-    SuffixTree suffixTree("banana");
-
-    CompactSuffixTree compact(suffixTree.mRootNode);
+    CompactSuffixTree compact("banana");
     compact.Print();
 }

@@ -21,6 +21,7 @@ struct TreeNode
     {
         value = _value;
     }
+
     /**
      * @param value to be added to this node.
      * @return the node connected to this node by the new edge added.
@@ -53,6 +54,29 @@ struct TreeNode
         // No value
         return false;
     }
+
+    /**
+     * TODO: Add doc.
+     * @return
+     */
+    std::string Compact()
+    {
+        bool isCompactable = true;
+        std::string retVal = "";
+        TreeNode* tmpNode = this;
+        while (tmpNode->children.size() != 0)
+        {
+            if (tmpNode->children.size() > 1)
+            {
+                isCompactable = false;
+                break;
+            }
+            retVal += tmpNode->value;
+            tmpNode = tmpNode->children[0];
+        }
+        if (isCompactable) return retVal + tmpNode->value;
+        else return "";
+    }
 };
 
 class SuffixTree
@@ -66,6 +90,13 @@ public:
      * @return
      */
     SuffixTree(const std::string &str);
+
+    /**
+     * @return The root node of this suffix tree.
+     */
+    TreeNode* GetRoot() const;
+
+private:
 
     /** Root node of the suffix tree. */
     TreeNode* mRootNode;

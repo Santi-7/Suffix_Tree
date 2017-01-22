@@ -30,6 +30,11 @@ SuffixTree::SuffixTree(const string &str)
     }
 }
 
+TreeNode* SuffixTree::GetRoot() const
+{
+    return mRootNode;
+}
+
 pair<unsigned int, TreeNode*> SuffixTree::GetPathDegree(const string &str) const
 {
     // Return values.

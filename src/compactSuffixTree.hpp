@@ -9,14 +9,16 @@
 #ifndef SUFFIX_TREE_COMPACTSUFFIXTREE_HPP
 #define SUFFIX_TREE_COMPACTSUFFIXTREE_HPP
 
+#include "suffixTree.hpp"
+
 #include <string>
 #include <vector>
-#include "suffixTree.hpp"
 
 struct CompactTreeNode
 {
     std::string value;
     std::vector<CompactTreeNode*> children;
+
     CompactTreeNode(std::string _value)
     {
         value = _value;
@@ -34,8 +36,6 @@ public:
      * @return
      */
     CompactSuffixTree(const std::string &str);
-
-    CompactSuffixTree(TreeNode* treeRoot);
 
     void Print();
 
