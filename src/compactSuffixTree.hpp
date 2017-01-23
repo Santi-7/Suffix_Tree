@@ -25,6 +25,31 @@ struct CompactTreeNode
     {
         value = _value;
     }
+
+    /**
+     * @return True if this node is a leaf in the compact suffix tree, false otherwise.
+     */
+    bool IsLeaf() const
+    {
+        return children.empty();
+    }
+
+    /**
+     * TODO: Add doc.
+     * @param path
+     * @return
+     */
+    std::string GetLongestRepeatedSubstring(const std::string &path) const
+    {
+        std::string longest = path;
+        for (CompactTreeNode* edge : children)
+        {
+            std::string longestEdge = edge->GetLongestRepeatedSubstring(path + value);
+            if (longestEdge.size() > longest.size())
+                longest = longestEdge;
+        }
+        return longest;
+    }
 };
 
 class CompactSuffixTree
@@ -39,6 +64,20 @@ public:
      * @return A compact suffix tree of [str].
      */
     CompactSuffixTree(const std::string &str);
+
+    /**
+     * Constructor for a Compact Suffix Tree.
+     *
+     * @param rootNode Root node of this compact suffix tree.
+     * @return A compact suffix tree with root node [rootNode].
+     */
+    CompactSuffixTree(CompactTreeNode* &rootNode);
+
+
+    /**
+     * @return The longest repeated substring of the string represented by this tree.
+     */
+    std::string GetLongestRepeatedSubstring();
 
     /**
      * Prints this Compact Suffix Tree.

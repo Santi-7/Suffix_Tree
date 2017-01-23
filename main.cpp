@@ -6,11 +6,14 @@
 **         Santiago Gil Begué, NIA: 683482
 ** -------------------------------------------------------------------------*/
 
-#include <suffixTree.hpp>
 #include <compactSuffixTree.hpp>
+
+#include <iostream>
 
 int main(int argc, char *argv[])
 {
-    CompactSuffixTree compact("banana");
+    CompactSuffixTree compact("HOLAPITHOLA");
     compact.Print();
+
+    std::cout << std::endl << compact.GetLongestRepeatedSubstring();
 }

@@ -18,6 +18,10 @@ CompactSuffixTree::CompactSuffixTree(const string &str)
     mRootNode = GetCompactTree(baseTree.GetRoot());
 }
 
+CompactSuffixTree::CompactSuffixTree(CompactTreeNode* &rootNode)
+: mRootNode(rootNode)
+{}
+
 CompactTreeNode* CompactSuffixTree::GetCompactTree(TreeNode* node)
 {
     CompactTreeNode* newNode;
@@ -39,6 +43,11 @@ CompactTreeNode* CompactSuffixTree::GetCompactTree(TreeNode* node)
         return nullptr;
     }
     return newNode;
+}
+
+string CompactSuffixTree::GetLongestRepeatedSubstring()
+{
+    return mRootNode->GetLongestRepeatedSubstring("");
 }
 
 void CompactSuffixTree::Print()
