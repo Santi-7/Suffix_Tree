@@ -22,18 +22,21 @@ CompactTreeNode* CompactSuffixTree::GetCompactTree(TreeNode* node)
 {
     CompactTreeNode* newNode;
     string compacted = node->Compact();
-    if (compacted == "")
+    if (compacted != "")
     {
-        string tmp(1,node->value);
-        newNode = new CompactTreeNode(tmp);
-        for (unsigned int i = 0; i < node->children.size(); ++i)
+        newNode = new CompactTreeNode(compacted);
+        for (int i = 0; i < compacted.size()-1; ++i)
+        {
+            node = node->children[0];
+        }
+        for (int i = 0; i < node->children.size(); ++i)
         {
             newNode->children.push_back(GetCompactTree(node->children[i]));
         }
     }
     else
     {
-        newNode = new CompactTreeNode(compacted);
+        return nullptr;
     }
     return newNode;
 }

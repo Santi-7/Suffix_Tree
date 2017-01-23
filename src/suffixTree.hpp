@@ -62,21 +62,14 @@ struct TreeNode
      */
     std::string Compact()
     {
-        bool isCompactable = true;
         std::string retVal = "";
         TreeNode* tmpNode = this;
-        while (tmpNode->children.size() != 0)
+        while (tmpNode->children.size() == 1)
         {
-            if (tmpNode->children.size() > 1)
-            {
-                isCompactable = false;
-                break;
-            }
             retVal += tmpNode->value;
             tmpNode = tmpNode->children[0];
         }
-        if (isCompactable) return retVal + tmpNode->value;
-        else return "";
+        return retVal + tmpNode->value;
     }
 };
 
