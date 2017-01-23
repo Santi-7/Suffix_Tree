@@ -42,7 +42,7 @@ void PrintFromNode(CompactTreeNode* node)
 {
     if (node->children.size() == 0)
     {
-        cout << "[.";
+        cout << "[";
         for (char c : node->value)
         {
             if (c == '$')
@@ -55,7 +55,7 @@ void PrintFromNode(CompactTreeNode* node)
     }
     else
     {
-        cout << "[.";
+        cout << "[";
         for (char c : node->value)
         {
             if (c == '$')
