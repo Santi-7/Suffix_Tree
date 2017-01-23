@@ -12,7 +12,13 @@
 
 using namespace std;
 
-CompactTreeNode* GetCompactTree(TreeNode* node)
+CompactSuffixTree::CompactSuffixTree(const string &str)
+{
+    SuffixTree baseTree(str);
+    mRootNode = GetCompactTree(baseTree.GetRoot());
+}
+
+CompactTreeNode* CompactSuffixTree::GetCompactTree(TreeNode* node)
 {
     CompactTreeNode* newNode;
     string compacted = node->Compact();
@@ -32,13 +38,12 @@ CompactTreeNode* GetCompactTree(TreeNode* node)
     return newNode;
 }
 
-CompactSuffixTree::CompactSuffixTree(const string &str)
+void CompactSuffixTree::Print()
 {
-    SuffixTree baseTree(str);
-    mRootNode = GetCompactTree(baseTree.GetRoot());
+    PrintFromNode(mRootNode);
 }
 
-void PrintFromNode(CompactTreeNode* node)
+void CompactSuffixTree::PrintFromNode(CompactTreeNode* node)
 {
     if (node->children.size() == 0)
     {
@@ -71,9 +76,4 @@ void PrintFromNode(CompactTreeNode* node)
         }
         cout << " ] ";
     }
-}
-
-void CompactSuffixTree::Print()
-{
-    PrintFromNode(mRootNode);
 }

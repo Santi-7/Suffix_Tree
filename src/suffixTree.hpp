@@ -14,7 +14,9 @@
 
 struct TreeNode
 {
+    /** Value of this node. */
     char value;
+    /** Edges from this node. */
     std::vector<TreeNode*> children;
 
     TreeNode(char _value)
@@ -28,7 +30,6 @@ struct TreeNode
      */
     TreeNode* InsertEdge(const char value)
     {
-
         children.push_back(new TreeNode(value));
         return children[children.size() - 1];
     }
@@ -85,9 +86,10 @@ class SuffixTree
 public:
 
     /**
-     * TODO: Add doc.
-     * @param str
-     * @return
+     * Constructor for a Suffix Tree.
+     *
+     * @param str String to construct its suffix tree.
+     * @return A suffix tree of [str].
      */
     SuffixTree(const std::string &str);
 

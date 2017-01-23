@@ -16,7 +16,9 @@
 
 struct CompactTreeNode
 {
+    /** Value of this node. */
     std::string value;
+    /** Edges from this node. */
     std::vector<CompactTreeNode*> children;
 
     CompactTreeNode(std::string _value)
@@ -31,18 +33,35 @@ class CompactSuffixTree
 public:
 
     /**
-     * TODO: Add doc.
-     * @param str
-     * @return
+     * Constructor for a Compact Suffix Tree.
+     *
+     * @param str String to construct its compact suffix tree.
+     * @return A compact suffix tree of [str].
      */
     CompactSuffixTree(const std::string &str);
 
+    /**
+     * Prints this Compact Suffix Tree.
+     */
     void Print();
 
 private:
 
     /** Root node of the compact suffix tree. */
     CompactTreeNode* mRootNode;
+
+    /**
+     * TODO: Add doc.
+     * @param node
+     * @return
+     */
+    CompactTreeNode* GetCompactTree(TreeNode* node);
+
+    /**
+     * TODO: Add doc.
+     * @param node
+     */
+    void PrintFromNode(CompactTreeNode* node);
 };
 
 #endif // SUFFIX_TREE_COMPACTSUFFIXTREE_HPP
