@@ -27,14 +27,6 @@ struct CompactTreeNode
     }
 
     /**
-     * @return True if this node is a leaf in the compact suffix tree, false otherwise.
-     */
-    bool IsLeaf() const
-    {
-        return children.empty();
-    }
-
-    /**
      * TODO: Add doc.
      * @param path
      * @return
