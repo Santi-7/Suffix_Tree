@@ -1,6 +1,6 @@
 /* ---------------------------------------------------------------------------
 ** suffixTree.hpp
-** TODO: Add doc.
+** Container for a suffix tree.
 **
 ** Author: Miguel Jorge Galindo Ramos, NIA: 679954
 **         Santiago Gil Begué, NIA: 683482
@@ -11,26 +11,27 @@
 
 #include <string>
 #include <vector>
+#include <tuple>
 
 struct TreeNode
 {
     /** Value of this node. */
-    char value;
+    int charPosition;
     /** Edges from this node. */
     std::vector<TreeNode*> children;
 
-    TreeNode(char _value)
+    TreeNode(int _charPosition)
     {
-        value = _value;
+        charPosition = _charPosition;
     }
 
     /**
      * @param value to be added to this node.
      * @return the node connected to this node by the new edge added.
      */
-    TreeNode* InsertEdge(const char value)
+    TreeNode* InsertEdge(int position)
     {
-        children.push_back(new TreeNode(value));
+        children.push_back(new TreeNode(position));
         return children[children.size() - 1];
     }
 
@@ -40,13 +41,13 @@ struct TreeNode
      *  by the desired edge, if it exists.
      * @return True if the edge with the desired value exists, false otherwise.
      */
-    bool HasEdge(const char value, TreeNode* &node)
+    bool HasEdge(const char value, TreeNode* &node, const std::string& word)
     {
         // Check all the children.
         for (const auto &currentEdge : children)
         {
             // The value value is the desired.
-            if (currentEdge->value == value)
+            if (word[currentEdge->charPosition] == value)
             {
                 node = currentEdge;
                 return true;
@@ -56,21 +57,6 @@ struct TreeNode
         return false;
     }
 
-    /**
-     * TODO: Add doc.
-     * @return
-     */
-    std::string Compact()
-    {
-        std::string retVal = "";
-        TreeNode* tmpNode = this;
-        while (tmpNode->children.size() == 1)
-        {
-            retVal += tmpNode->value;
-            tmpNode = tmpNode->children[0];
-        }
-        return retVal + tmpNode->value;
-    }
 };
 
 class SuffixTree
@@ -100,7 +86,7 @@ private:
      * @param str String to look for its maximum prefix.
      * @return the node and path degree of the maximum shared prefix with [str].
      */
-    std::pair<unsigned int, TreeNode*> GetPathDegree(const std::string &str) const;
+    std::pair<unsigned int, TreeNode*> GetActiveNode(int from, const std::string& str) const;
 };
 
 #endif // SUFFIX_TREE_SUFFIXTREE_HPP

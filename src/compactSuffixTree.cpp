@@ -7,47 +7,62 @@
 ** -------------------------------------------------------------------------*/
 
 #include "compactSuffixTree.hpp"
-
+#include <algorithm>
 #include <iostream>
 
 using namespace std;
 
 CompactSuffixTree::CompactSuffixTree(const string &str)
 {
-    SuffixTree baseTree(str);
-    mRootNode = GetCompactTree(baseTree.GetRoot());
+    mStoredString = '$' + str + '$';
+    SuffixTree baseTree(mStoredString);
+    mRootNode = GetCompactTree(baseTree.GetRoot(), nullptr, 0);
+    // Sort the node depth vector to have the deepest node first.
+    sort(mDepthInfo.begin(), mDepthInfo.end(),
+            [](const InnerNodeDepth& a, const InnerNodeDepth& b ) -> bool{return a.depth > b.depth;});
 }
 
 CompactSuffixTree::CompactSuffixTree(CompactTreeNode* &rootNode)
 : mRootNode(rootNode)
 {}
 
-CompactTreeNode* CompactSuffixTree::GetCompactTree(TreeNode* node)
+CompactTreeNode* CompactSuffixTree::GetCompactTree(TreeNode* node, CompactTreeNode* parent, int depth)
 {
     CompactTreeNode* newNode;
-    string compacted = node->Compact();
-    if (compacted != "")
+    int begin = node->charPosition, end;
+    // Advance the node until an inner node is reached
+    while (node->children.size() == 1)
     {
-        newNode = new CompactTreeNode(compacted);
-        for (int i = 0; i < compacted.size()-1; ++i)
-        {
-            node = node->children[0];
-        }
-        for (int i = 0; i < node->children.size(); ++i)
-        {
-            newNode->children.push_back(GetCompactTree(node->children[i]));
-        }
+        node = node->children[0];
     }
-    else
+    end = node->charPosition;
+    // Create the compact node
+    newNode = new CompactTreeNode(begin, end, parent);
+    if (node->children.size() > 0)
     {
-        return nullptr;
+        mDepthInfo.emplace_back(newNode, depth + (end - begin));
+    }
+    for (int i = 0; i < node->children.size(); ++i)
+    {
+        newNode->children.push_back(GetCompactTree(node->children[i], newNode, depth + (end - begin) + 1));
     }
     return newNode;
 }
 
 string CompactSuffixTree::GetLongestRepeatedSubstring()
 {
-    return mRootNode->GetLongestRepeatedSubstring("");
+    string tmp;
+    CompactTreeNode* tmpNode = mDepthInfo.front().node;
+    int currDepth = mDepthInfo.front().depth;
+
+    tmp.reserve((unsigned int) currDepth);
+    while(tmpNode != nullptr && tmpNode->parent != nullptr)
+    {
+        unsigned int begin = (unsigned int) tmpNode->begin, size = (unsigned int)tmpNode->end - begin + 1;
+        tmp = mStoredString.substr(begin, size) + tmp;
+        tmpNode = tmpNode->parent;
+    }
+    return tmp;
 }
 
 void CompactSuffixTree::Print()
@@ -60,26 +75,26 @@ void CompactSuffixTree::PrintFromNode(CompactTreeNode* node)
     if (node->children.size() == 0)
     {
         cout << "[";
-        for (char c : node->value)
+        for (int i = node->begin; i <= node->end; ++i)
         {
-            if (c == '$')
+            if (mStoredString[i] == '$')
             {
                 cout << "\\$";
             }
-            else cout << c;
+            else cout << mStoredString[i];
         }
         cout << " ]\n";
     }
     else
     {
         cout << "[";
-        for (char c : node->value)
+        for (int i = node->begin; i <= node->end; ++i)
         {
-            if (c == '$')
+            if (mStoredString[i] == '$')
             {
                 cout << "\\$";
             }
-            else cout << c;
+            else cout << mStoredString[i];
         }
         cout << ' ';
         for (int i = 0; i < node->children.size(); ++i)

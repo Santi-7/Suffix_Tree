@@ -8,25 +8,22 @@
 
 #include "suffixTree.hpp"
 
-#include <tuple>
-
 using namespace std;
 
 SuffixTree::SuffixTree(const string &str)
 {
-    mRootNode = new TreeNode(' ');
+    mRootNode = new TreeNode(-1);
     // Copy of the parameter.
-    string copy = "$" + str + "$";
     // Constructs the tree with all the suffixes of the input string.
-    for (unsigned int i = 0; i < copy.size(); ++i)
+    for (unsigned int i = 0; i < str.size(); ++i)
     {
         // Node and degree of the maximum prefix shared in the tree.
-        unsigned int pathDegree;
+        unsigned int alreadyInTree;
         TreeNode* pathNode;
-        tie(pathDegree, pathNode) = GetPathDegree(copy.substr(i));
+        tie(alreadyInTree, pathNode) = GetActiveNode(i, str);
         // Add the chars remaining to the suffix tree as a new branch.
-        for (unsigned int j = i + pathDegree; j < copy.size(); ++j)
-            pathNode = pathNode->InsertEdge(copy[j]);
+        for (unsigned int j = i + alreadyInTree; j < str.size(); ++j)
+            pathNode = pathNode->InsertEdge(j);
     }
 }
 
@@ -35,7 +32,7 @@ TreeNode* SuffixTree::GetRoot() const
     return mRootNode;
 }
 
-pair<unsigned int, TreeNode*> SuffixTree::GetPathDegree(const string &str) const
+pair<unsigned int, TreeNode*> SuffixTree::GetActiveNode(int from, const string& str) const
 {
     // Return values.
     unsigned int pathIndex = 0;
@@ -52,7 +49,7 @@ pair<unsigned int, TreeNode*> SuffixTree::GetPathDegree(const string &str) const
     while (true)
     {
         // Current node has an edge with the current char examined.
-        if (currentNode->HasEdge(str[pathIndex], currentNode))
+        if (currentNode->HasEdge(str[from+pathIndex], currentNode, str))
             pathIndex++;
         else break;
     }
