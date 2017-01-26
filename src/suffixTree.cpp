@@ -22,8 +22,10 @@ SuffixTree::SuffixTree(const string &str)
         unsigned int alreadyInTree;
         TreeNode* pathNode;
         tie(alreadyInTree, pathNode) = GetActiveNode(i, str, str[i-1]);
+        // Marks the node as left diverse if it proceeds.
+        if (!pathNode->isLeftDiverse)
+            pathNode->DecideLeftDiverse(str[i-1]);
         // Add the chars remaining to the suffix tree as a new branch.
-        pathNode->DecideLeftDiverse(str[i-1]);
         for (unsigned int j = i + alreadyInTree; j < str.size(); ++j)
             pathNode = pathNode->InsertEdge(j, str[i-1]);
     }
