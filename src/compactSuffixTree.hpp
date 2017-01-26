@@ -44,6 +44,11 @@ struct CompactTreeNode
         isLeftDiverse = _isLeftDiverse;
     }
 
+    ~CompactTreeNode()
+    {
+        for (CompactTreeNode* child : children) delete child;
+    }
+
 };
 
 struct InnerNodeDepth

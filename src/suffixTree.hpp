@@ -36,6 +36,11 @@ struct TreeNode
         charPosition = _charPosition;
     }
 
+    ~TreeNode()
+    {
+        for (TreeNode* child : children) delete child;
+    }
+
     /**
      * @param value to be added to this node.
      * @param leftSymbol Left Symbol of the new node.
