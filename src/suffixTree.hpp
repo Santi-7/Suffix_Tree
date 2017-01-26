@@ -22,8 +22,9 @@ struct TreeNode
 
     /** True if this node is left-diverse. */
     bool isLeftDiverse = false;
-    /** Left symbols of a node, saved to determine if it's a left-diverse node. */
-    std::vector<char> leftSymbols;
+    /** A left symbol of a node, saved to determine if it's a left-diverse node. With just
+     * one symbol we can already decide if it's a left-diverse node. */
+    char leftSymbol = 0;
 
     TreeNode(int _charPosition)
     {
@@ -39,7 +40,7 @@ struct TreeNode
     {
         children.push_back(new TreeNode(position));
         TreeNode* newNode = children[children.size() - 1];
-        newNode->leftSymbols.push_back(leftSymbol);
+        newNode->leftSymbol = leftSymbol;
         return newNode;
     }
 
@@ -71,15 +72,10 @@ struct TreeNode
      */
     void DecideLeftDiverse(const char leftSymbol)
     {
-        for (char left : leftSymbols)
-        {
-            // It's left diverse.
-            if (left != leftSymbol)
-            {
-                isLeftDiverse = true;
-                return;
-            }
-        }
+        if (this->leftSymbol != leftSymbol)
+            isLeftDiverse = true;
+        else
+            this->leftSymbol = leftSymbol;
     }
 };
 
