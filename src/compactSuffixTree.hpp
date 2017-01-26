@@ -16,6 +16,8 @@
 #include <string>
 #include <vector>
 
+enum Constructor {NLOGN, N2};
+
 struct CompactTreeNode
 {
     /** Value of this node. */
@@ -66,9 +68,7 @@ public:
      * @param str String to construct its compact suffix tree.
      * @return A compact suffix tree of [str].
      */
-    CompactSuffixTree(const std::string &str);
-
-    CompactSuffixTree(const std::string &str, bool fast);
+    CompactSuffixTree(const std::string &str, Constructor constructor = NLOGN);
 
     /**
      * Constructor for a Compact Suffix Tree.

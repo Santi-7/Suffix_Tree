@@ -12,14 +12,28 @@
 
 using namespace std;
 
-CompactSuffixTree::CompactSuffixTree(const string &str)
+CompactSuffixTree::CompactSuffixTree(const std::string& str, Constructor constructor)
 {
-    mStoredString = '$' + str + '$';
-    SuffixTree baseTree(mStoredString);
-    mRootNode = GetCompactTree(baseTree.GetRoot(), nullptr, 0);
-    // Sort the node depth vector to have the deepest node first.
-    sort(mDepthInfo.begin(), mDepthInfo.end(),
-            [](const InnerNodeDepth& a, const InnerNodeDepth& b ) -> bool{return a.depth > b.depth;});
+    if (constructor == NLOGN)
+    {
+        mStoredString = '$' + str + '$';
+        mRootNode = new CompactTreeNode(-1,-1, nullptr, 0);
+        for (int i = 1; i < mStoredString.size()-1; ++i)
+        {
+            Insert(mRootNode, i, i);
+        }
+        sort(mDepthInfo.begin(), mDepthInfo.end(),
+                [](const InnerNodeDepth& a, const InnerNodeDepth& b ) -> bool{return a.depth > b.depth;});
+    }
+    else if (constructor == N2)
+    {
+        mStoredString = '$' + str + '$';
+        SuffixTree baseTree(mStoredString);
+        mRootNode = GetCompactTree(baseTree.GetRoot(), nullptr, 0);
+        // Sort the node depth vector to have the deepest node first.
+        sort(mDepthInfo.begin(), mDepthInfo.end(),
+                [](const InnerNodeDepth& a, const InnerNodeDepth& b ) -> bool{return a.depth > b.depth;});
+    }
 }
 
 CompactSuffixTree::CompactSuffixTree(CompactTreeNode* &rootNode)
@@ -104,18 +118,6 @@ void CompactSuffixTree::PrintFromNode(CompactTreeNode* node)
         }
         cout << " ] ";
     }
-}
-
-CompactSuffixTree::CompactSuffixTree(const std::string& str, bool fast)
-{
-    mStoredString = '$' + str + '$';
-    mRootNode = new CompactTreeNode(-1,-1, nullptr, 0);
-    for (int i = 1; i < mStoredString.size()-1; ++i)
-    {
-        Insert(mRootNode, i, i);
-    }
-    sort(mDepthInfo.begin(), mDepthInfo.end(),
-            [](const InnerNodeDepth& a, const InnerNodeDepth& b ) -> bool{return a.depth > b.depth;});
 }
 
 void CompactSuffixTree::Insert(CompactTreeNode* root, const int from, const int pathFirstChar)

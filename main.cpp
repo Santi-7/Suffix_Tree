@@ -14,11 +14,10 @@
 using namespace std;
 using namespace std::chrono;
 
-template <class F, typename P>
-tuple<long int, F> timeConstruction(P parameter)
+tuple<long int, CompactSuffixTree> timeConstruction(string& parameter, Constructor strategy)
 {
     high_resolution_clock::time_point t1 = high_resolution_clock::now();
-    F tmp(parameter);
+    CompactSuffixTree tmp(parameter);
     high_resolution_clock::time_point t2 = high_resolution_clock::now();
     return make_tuple(duration_cast<microseconds>(t2-t1).count(), tmp);
 }
@@ -55,13 +54,16 @@ int main(int argc, char *argv[])
     bool getMaximals = false;
     bool time = false;
     bool print = false;
+    Constructor strategy = NLOGN;
     for (int i = 1; i < argc; i++)
     {
         string tmpArg = string(argv[i]);
         if (tmpArg == "-l") getLongest = true;
         else if (tmpArg == "-m") getMaximals = true;
-        else if(tmpArg == "--time") time = true;
-        else if(tmpArg == "--print") print = true;
+        else if (tmpArg == "--time") time = true;
+        else if (tmpArg == "--print") print = true;
+        else if (tmpArg == "--n2") strategy = N2;
+        else if (tmpArg == "--nlogn") ;
         else
         {
             PrintUsage();
@@ -73,7 +75,7 @@ int main(int argc, char *argv[])
     getline(cin, input);
     if (time)
     {
-        auto result = timeConstruction<CompactSuffixTree>(input);
+        auto result = timeConstruction(input, strategy);
         CompactSuffixTree tree(get<1>(result));
         long int treeBuildTime = get<0>(result);
         long int longestSubstrTime = 0L;
@@ -97,7 +99,7 @@ int main(int argc, char *argv[])
     }
     else
     {
-        CompactSuffixTree tree (input, true);
+        CompactSuffixTree tree (input, strategy);
         if (getLongest)
         {
             auto longest = timeLongestSubstring(tree);
