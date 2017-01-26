@@ -15,7 +15,7 @@ SuffixTree::SuffixTree(const string &str)
     mRootNode = new TreeNode(-1);
     // Copy of the parameter.
     // Constructs the tree with all the suffixes of the input string.
-    for (unsigned int i = 0; i < str.size(); ++i)
+    for (unsigned int i = 1; i < str.size(); ++i)
     {
         // Node and degree of the maximum prefix shared in the tree.
         unsigned int alreadyInTree;
