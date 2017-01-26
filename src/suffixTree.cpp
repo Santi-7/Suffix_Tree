@@ -10,20 +10,22 @@
 
 using namespace std;
 
+// str must already be $ ... $
 SuffixTree::SuffixTree(const string &str)
 {
     mRootNode = new TreeNode(-1);
-    // Copy of the parameter.
     // Constructs the tree with all the suffixes of the input string.
+    // From 1 in order to don't save the path $ ... $
     for (unsigned int i = 1; i < str.size(); ++i)
     {
         // Node and degree of the maximum prefix shared in the tree.
         unsigned int alreadyInTree;
         TreeNode* pathNode;
-        tie(alreadyInTree, pathNode) = GetActiveNode(i, str);
+        tie(alreadyInTree, pathNode) = GetActiveNode(i, str, str[i-1]);
         // Add the chars remaining to the suffix tree as a new branch.
+        pathNode->DecideLeftDiverse(str[i-1]);
         for (unsigned int j = i + alreadyInTree; j < str.size(); ++j)
-            pathNode = pathNode->InsertEdge(j);
+            pathNode = pathNode->InsertEdge(j, str[i-1]);
     }
 }
 
@@ -32,7 +34,8 @@ TreeNode* SuffixTree::GetRoot() const
     return mRootNode;
 }
 
-pair<unsigned int, TreeNode*> SuffixTree::GetActiveNode(int from, const string& str) const
+pair<unsigned int, TreeNode*> SuffixTree::GetActiveNode(const int from, const string& str,
+                                                        const char leftSymbol) const
 {
     // Return values.
     unsigned int pathIndex = 0;
@@ -50,7 +53,10 @@ pair<unsigned int, TreeNode*> SuffixTree::GetActiveNode(int from, const string& 
     {
         // Current node has an edge with the current char examined.
         if (currentNode->HasEdge(str[from+pathIndex], currentNode, str))
+        {
+            currentNode->leftSymbols.push_back(leftSymbol);
             pathIndex++;
+        }
         else break;
     }
 

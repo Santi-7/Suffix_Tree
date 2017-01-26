@@ -20,6 +20,11 @@ struct TreeNode
     /** Edges from this node. */
     std::vector<TreeNode*> children;
 
+    /** True if this node is left-diverse. */
+    bool isLeftDiverse = false;
+    /** Left symbols of a node, saved to determine if it's a left-diverse node. */
+    std::vector<char> leftSymbols;
+
     TreeNode(int _charPosition)
     {
         charPosition = _charPosition;
@@ -27,12 +32,15 @@ struct TreeNode
 
     /**
      * @param value to be added to this node.
+     * @param leftSymbol Left Symbol of the new node.
      * @return the node connected to this node by the new edge added.
      */
-    TreeNode* InsertEdge(int position)
+    TreeNode* InsertEdge(const int position, const char leftSymbol)
     {
         children.push_back(new TreeNode(position));
-        return children[children.size() - 1];
+        TreeNode* newNode = children[children.size() - 1];
+        newNode->leftSymbols.push_back(leftSymbol);
+        return newNode;
     }
 
     /**
@@ -57,6 +65,23 @@ struct TreeNode
         return false;
     }
 
+    /**
+     * Marks isLeftDiverse as true if this node is now left diverse with the new leftSymbol.
+     * @param leftSymbol to compare if the node is left diverse.
+     */
+    void DecideLeftDiverse(const char leftSymbol)
+    {
+        for (char left : leftSymbols)
+        {
+            // It's left diverse.
+            if (left != leftSymbol)
+            {
+                isLeftDiverse = true;
+                break;
+            }
+        }
+        leftSymbols.push_back(leftSymbol);
+    }
 };
 
 class SuffixTree
@@ -86,9 +111,11 @@ private:
 
     /**
      * @param str String to look for its maximum prefix.
+     * @param leftSymbol Left Symbol of the new node.
      * @return the node and path degree of the maximum shared prefix with [str].
      */
-    std::pair<unsigned int, TreeNode*> GetActiveNode(int from, const std::string& str) const;
+    std::pair<unsigned int, TreeNode*> GetActiveNode(const int from, const std::string &str,
+                                                     const char leftSymbol) const;
 };
 
 #endif // SUFFIX_TREE_SUFFIXTREE_HPP
