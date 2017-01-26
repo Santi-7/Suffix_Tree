@@ -35,16 +35,6 @@ struct TreeNode
     }
 
     /**
-     * Sets the left symbol to the new value if it's still uninitialized.
-     * @param leftSymbol New value for the left symbol.
-     */
-    void SetLeftSymbol(const char leftSymbol)
-    {
-        if (this->leftSymbol == LEFT_SYMBOL_SENTINEL)
-            this->leftSymbol = leftSymbol;
-    }
-
-    /**
      * @param value to be added to this node.
      * @param leftSymbol Left Symbol of the new node.
      * @return the node connected to this node by the new edge added.
@@ -63,7 +53,7 @@ struct TreeNode
      *  by the desired edge, if it exists.
      * @return True if the edge with the desired value exists, false otherwise.
      */
-    bool HasEdge(const char value, TreeNode* &node, const std::string& word)
+    bool HasEdge(const char value, TreeNode* &node, const std::string &word)
     {
         // Check all the children.
         for (const auto &currentEdge : children)
@@ -87,8 +77,6 @@ struct TreeNode
     {
         if (this->leftSymbol != leftSymbol)
             isLeftDiverse = true;
-        else
-            this->leftSymbol = leftSymbol;
     }
 };
 

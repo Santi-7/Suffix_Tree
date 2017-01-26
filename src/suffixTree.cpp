@@ -55,10 +55,7 @@ pair<unsigned int, TreeNode*> SuffixTree::GetActiveNode(const int from, const st
     {
         // Current node has an edge with the current char examined.
         if (currentNode->HasEdge(str[from+pathIndex], currentNode, str))
-        {
-            currentNode->SetLeftSymbol(leftSymbol);
             pathIndex++;
-        }
         else break;
     }
 
