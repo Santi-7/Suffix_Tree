@@ -50,7 +50,7 @@ CompactTreeNode* CompactSuffixTree::GetCompactTree(TreeNode* node, CompactTreeNo
     }
     end = node->charPosition;
     // Create the compact node
-    newNode = new CompactTreeNode(begin, end, parent,0);
+    newNode = new CompactTreeNode(begin, end, parent, node->pathFirstChar, node->isLeftDiverse);
     if (node->children.size() > 0)
     {
         mDepthInfo.emplace_back(newNode, depth + (end - begin));
@@ -179,5 +179,6 @@ std::vector<std::string> CompactSuffixTree::GetMaximalRepetitions() const
             retVal.push_back(mStoredString.substr(a,b-a+1));
         }
     }
+    sort(retVal.begin(), retVal.end());
     return retVal;
 }

@@ -27,7 +27,7 @@ struct TreeNode
     bool isLeftDiverse = false;
     /** A left symbol of a node, saved to determine if it's a left-diverse node. With just
      * one symbol we can already decide if it's a left-diverse node. */
-    char leftSymbol = LEFT_SYMBOL_SENTINEL;
+    int pathFirstChar = LEFT_SYMBOL_SENTINEL;
     /** True if the node will be left diverse if a bifurcation occurrs. */
     bool willBeLeftDiverse = false;
 
@@ -46,11 +46,11 @@ struct TreeNode
      * @param leftSymbol Left Symbol of the new node.
      * @return the node connected to this node by the new edge added.
      */
-    TreeNode* InsertEdge(const int position, const char leftSymbol)
+    TreeNode* InsertEdge(const int position, const int leftSymbol)
     {
         children.push_back(new TreeNode(position));
         TreeNode* newNode = children[children.size() - 1];
-        newNode->leftSymbol = leftSymbol;
+        newNode->pathFirstChar = leftSymbol;
         return newNode;
     }
 
@@ -78,11 +78,11 @@ struct TreeNode
 
     /**
      * Marks isLeftDiverse as true if this node is now left diverse with the new leftSymbol.
-     * @param leftSymbol to compare if the node is left diverse.
+     * @param firstChar to compare if the node is left diverse.
      */
-    void DecideLeftDiverse(const char leftSymbol)
+    void DecideLeftDiverse(const int firstChar, const std::string& str)
     {
-        if (willBeLeftDiverse | this->leftSymbol != leftSymbol)
+        if (willBeLeftDiverse | str[this->pathFirstChar - 1] != str[firstChar-1])
             isLeftDiverse = true;
     }
 };

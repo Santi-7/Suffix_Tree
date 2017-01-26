@@ -21,13 +21,13 @@ SuffixTree::SuffixTree(const string &str)
         // Node and degree of the maximum prefix shared in the tree.
         unsigned int alreadyInTree;
         TreeNode* pathNode;
-        tie(alreadyInTree, pathNode) = GetActiveNode(i, str, str[i-1]);
+        tie(alreadyInTree, pathNode) = GetActiveNode(i, str, i);
         // Marks the node as left diverse if it proceeds.
         if (!pathNode->isLeftDiverse)
-            pathNode->DecideLeftDiverse(str[i-1]);
+            pathNode->DecideLeftDiverse(i, str);
         // Add the chars remaining to the suffix tree as a new branch.
         for (unsigned int j = i + alreadyInTree; j < str.size(); ++j)
-            pathNode = pathNode->InsertEdge(j, str[i-1]);
+            pathNode = pathNode->InsertEdge(j, i);
     }
 }
 
@@ -57,7 +57,7 @@ pair<unsigned int, TreeNode*> SuffixTree::GetActiveNode(const int from, const st
         // Current node has an edge with the current char examined.
         if (currentNode->HasEdge(str[from+pathIndex], currentNode, str))
         {
-            if (previousNode->leftSymbol != leftSymbol)
+            if (previousNode->pathFirstChar != leftSymbol)
                 previousNode->willBeLeftDiverse = true;
             pathIndex++;
         }
