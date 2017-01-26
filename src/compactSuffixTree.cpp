@@ -49,7 +49,7 @@ CompactTreeNode* CompactSuffixTree::GetCompactTree(TreeNode* node, CompactTreeNo
     return newNode;
 }
 
-string CompactSuffixTree::GetLongestRepeatedSubstring()
+string CompactSuffixTree::GetLongestRepeatedSubstring() const
 {
     string tmp;
     CompactTreeNode* tmpNode = mDepthInfo.front().node;
@@ -104,3 +104,98 @@ void CompactSuffixTree::PrintFromNode(CompactTreeNode* node)
         cout << " ] ";
     }
 }
+
+CompactSuffixTree::CompactSuffixTree(const std::string& str, bool fast)
+{
+    mStoredString = '$' + str + '$';
+    mRootNode = new CompactTreeNode(-1,-1, nullptr);
+    for (int i = 1; i < mStoredString.size()-1; ++i)
+    {
+        Insert(mRootNode, i, i);
+    }
+    sort(mDepthInfo.begin(), mDepthInfo.end(),
+            [](const InnerNodeDepth& a, const InnerNodeDepth& b ) -> bool{return a.depth > b.depth;});
+}
+
+void CompactSuffixTree::Insert(CompactTreeNode* root, const int from, const int pathFirstChar)
+{
+    CompactTreeNode* insertingBefore = root;
+    int fitting = 0; // How many characters are already part of a node in the tree.
+    int childIndex = -1;
+    for (int i = 0; i < root->children.size(); ++i)
+    {
+        CompactTreeNode* child = root->children[i];
+        if (mStoredString[child->begin] == mStoredString[from])
+        {
+            childIndex = i;
+            insertingBefore = child;
+            while (child->begin+fitting <= child->end &&
+                    mStoredString[child->begin+fitting] == mStoredString[from+fitting]) fitting++;
+            break;
+        }
+    }
+
+    // The first [fitting] characters in the node [insertingBefore] are the same as the characters in mStoredString[[from]:]
+    if (childIndex == -1)
+    {
+        // The new node is a new child of root
+        CompactTreeNode* newNode = new CompactTreeNode(from, (int)mStoredString.size() - 1, root);
+        root->children.push_back(newNode);
+    }
+    else if (insertingBefore->begin+fitting > insertingBefore->end)
+    {
+        Insert(insertingBefore, from + fitting, pathFirstChar);
+    }
+    else
+    {
+        // The new node shares part of the inner node [insertingBefore]
+        CompactTreeNode* newNode = new CompactTreeNode(from, from + fitting - 1 , root);
+        mDepthInfo.emplace_back(newNode, from + fitting - pathFirstChar);
+        insertingBefore->begin += fitting;
+        insertingBefore->parent = newNode;
+        root->children[childIndex] = newNode;
+        Insert(newNode, from + fitting, pathFirstChar);
+        newNode->children.push_back(insertingBefore);
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

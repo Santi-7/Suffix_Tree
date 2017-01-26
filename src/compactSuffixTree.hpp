@@ -64,6 +64,8 @@ public:
      */
     CompactSuffixTree(const std::string &str);
 
+    CompactSuffixTree(const std::string &str, bool fast);
+
     /**
      * Constructor for a Compact Suffix Tree.
      *
@@ -76,7 +78,9 @@ public:
      * @return Longest repeated substring. This is, the longest substring that appears in the
      * original string at least twice.
      */
-    std::string GetLongestRepeatedSubstring();
+    std::string GetLongestRepeatedSubstring() const;
+
+    //GetMaximalRepetitions
 
     /**
      * Prints this Compact Suffix Tree in a LaTex-friendly format.
@@ -103,6 +107,16 @@ private:
      * @return Pointer to the root of the compact subtree that corresponds with the TreeNode node.
      */
     CompactTreeNode* GetCompactTree(TreeNode* node, CompactTreeNode* parent, int depth);
+
+    /**
+     * Inserts a new suffix in the tree while keeping it compact.
+     *
+     * @param root Node in which the suffix is to be inserted.
+     * @param from First character to insert in one of root's children.
+     * @param pathFirstChar First character of the suffix that is being inserted. Recursive calls in this method
+     *  keep this parameter intact. The first call should have from == pathFirstChar.
+     */
+    void Insert(CompactTreeNode* root, const int from, const int pathFirstChar);
 
     /**
      * Prints the tree in the format of LaTex's forest.
