@@ -25,6 +25,7 @@ SuffixTree::SuffixTree(const string &str)
         // Marks the node as left diverse if it proceeds.
         if (!pathNode->isLeftDiverse)
             pathNode->DecideLeftDiverse(str[i-1]);
+        pathNode->leftSymbols.push_back(str[i-1]);
         // Add the chars remaining to the suffix tree as a new branch.
         for (unsigned int j = i + alreadyInTree; j < str.size(); ++j)
             pathNode = pathNode->InsertEdge(j, str[i-1]);

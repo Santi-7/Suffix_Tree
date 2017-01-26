@@ -77,10 +77,9 @@ struct TreeNode
             if (left != leftSymbol)
             {
                 isLeftDiverse = true;
-                break;
+                return;
             }
         }
-        leftSymbols.push_back(leftSymbol);
     }
 };
 
