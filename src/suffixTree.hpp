@@ -15,6 +15,9 @@
 
 struct TreeNode
 {
+    /** Sentinel value of a left symbol, to decide when it's uninitialized. */
+    static constexpr char LEFT_SYMBOL_SENTINEL = 0;
+
     /** Value of this node. */
     int charPosition;
     /** Edges from this node. */
@@ -24,11 +27,21 @@ struct TreeNode
     bool isLeftDiverse = false;
     /** A left symbol of a node, saved to determine if it's a left-diverse node. With just
      * one symbol we can already decide if it's a left-diverse node. */
-    char leftSymbol = 0;
+    char leftSymbol = LEFT_SYMBOL_SENTINEL;
 
     TreeNode(int _charPosition)
     {
         charPosition = _charPosition;
+    }
+
+    /**
+     * Sets the left symbol to the new value if it's still uninitialized.
+     * @param leftSymbol New value for the left symbol.
+     */
+    void SetLeftSymbol(const char leftSymbol)
+    {
+        if (this->leftSymbol == LEFT_SYMBOL_SENTINEL)
+            this->leftSymbol = leftSymbol;
     }
 
     /**
