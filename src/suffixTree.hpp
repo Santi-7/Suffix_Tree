@@ -111,7 +111,7 @@ private:
 
     /**
      * @param str String to look for its maximum prefix.
-     * @param leftSymbol Left Symbol of the new node.
+     * @param leftSymbol Left Symbol of the new substring.
      * @return the node and path degree of the maximum shared prefix with [str].
      */
     std::pair<unsigned int, TreeNode*> GetActiveNode(const int from, const std::string &str,
