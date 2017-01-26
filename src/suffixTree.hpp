@@ -93,7 +93,7 @@ public:
      * Constructor for a Suffix Tree.
      *
      * @param str String to construct its suffix tree. Must contain special characters around it to make sure the tree
-     *  is build correctly. Not enforced for flexibility, which makes it fragile too.
+     *  is built correctly. Not enforced for flexibility, which makes it fragile too.
      *  The first character won't be stored!
      * @return A suffix tree of [str].
      */
