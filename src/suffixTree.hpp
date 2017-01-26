@@ -28,6 +28,8 @@ struct TreeNode
     /** A left symbol of a node, saved to determine if it's a left-diverse node. With just
      * one symbol we can already decide if it's a left-diverse node. */
     char leftSymbol = LEFT_SYMBOL_SENTINEL;
+    /** True if the node will be left diverse if a bifurcation occurrs. */
+    bool willBeLeftDiverse = false;
 
     TreeNode(int _charPosition)
     {
@@ -75,7 +77,7 @@ struct TreeNode
      */
     void DecideLeftDiverse(const char leftSymbol)
     {
-        if (this->leftSymbol != leftSymbol)
+        if (willBeLeftDiverse | this->leftSymbol != leftSymbol)
             isLeftDiverse = true;
     }
 };
