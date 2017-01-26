@@ -103,6 +103,11 @@ public:
     SuffixTree(const std::string &str);
 
     /**
+     * Destructor. Frees the memory in use by the tree structure.
+     */
+    ~SuffixTree();
+
+    /**
      * @return The root node of this suffix tree.
      */
     TreeNode* GetRoot() const;

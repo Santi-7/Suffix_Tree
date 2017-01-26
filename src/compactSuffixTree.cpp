@@ -182,3 +182,8 @@ std::vector<std::string> CompactSuffixTree::GetMaximalRepetitions() const
     sort(retVal.begin(), retVal.end());
     return retVal;
 }
+
+CompactSuffixTree::~CompactSuffixTree()
+{
+    delete mRootNode;
+}

@@ -84,6 +84,11 @@ public:
     CompactSuffixTree(CompactTreeNode* &rootNode);
 
     /**
+     * Destructor. Frees the memory in use by the tree structure.
+     */
+    ~CompactSuffixTree();
+
+    /**
      * @return Longest repeated substring. This is, the longest substring that appears in the
      * original string at least twice.
      */
