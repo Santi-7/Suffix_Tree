@@ -14,9 +14,9 @@ using namespace std;
 
 CompactSuffixTree::CompactSuffixTree(const std::string& str, Constructor constructor)
 {
+    mStoredString = '$' + str + '$';
     if (constructor == NLOGN)
     {
-        mStoredString = '$' + str + '$';
         mRootNode = new CompactTreeNode(-1,-1, nullptr, 0);
         for (int i = 1; i < mStoredString.size()-1; ++i)
         {
@@ -27,7 +27,6 @@ CompactSuffixTree::CompactSuffixTree(const std::string& str, Constructor constru
     }
     else if (constructor == N2)
     {
-        mStoredString = '$' + str + '$';
         SuffixTree baseTree(mStoredString);
         mRootNode = GetCompactTree(baseTree.GetRoot(), nullptr, 0);
         // Sort the node depth vector to have the deepest node first.
@@ -182,44 +181,3 @@ std::vector<std::string> CompactSuffixTree::GetMaximalRepetitions() const
     }
     return retVal;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

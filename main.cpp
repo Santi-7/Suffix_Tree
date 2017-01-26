@@ -38,6 +38,9 @@ tuple<long int, vector<string>> timeMaximalRepetitions(const CompactSuffixTree& 
     return make_tuple(duration_cast<microseconds>(t2-t1).count(), retVal);
 }
 
+/**
+ * Prints the usage of the program.
+ */
 void PrintUsage()
 {
     cout << "Usage: " << endl;
@@ -45,11 +48,14 @@ void PrintUsage()
 
 int main(int argc, char *argv[])
 {
+    // Wrong number of parameters.
     if (argc == 1)
     {
         PrintUsage();
         return 1;
     }
+
+    // Read parameters.
     bool getLongest = false;
     bool getMaximals = false;
     bool time = false;
@@ -71,8 +77,12 @@ int main(int argc, char *argv[])
         }
     }
 
+    // Input string.
+    cout << "Input: ";
     string input;
     getline(cin, input);
+
+    // Execute the query vs the input string.
     if (time)
     {
         auto result = timeConstruction(input, strategy);
