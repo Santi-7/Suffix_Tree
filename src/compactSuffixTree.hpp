@@ -24,20 +24,24 @@ struct CompactTreeNode
     /** Pointe to the parent node. */
     CompactTreeNode* parent;
 
-    // TODO: Use this!
     /** True if this node is left-diverse. */
     bool isLeftDiverse = false;
+
+    int originalPathFirstChar;
 
     /** Edges from this node. */
     std::vector<CompactTreeNode*> children;
 
     /** Simple constructor. */
-    CompactTreeNode(int _begin, int _end, CompactTreeNode* _parent)
+    CompactTreeNode(int _begin, int _end, CompactTreeNode* _parent, int _originalPathFirstChar = 0, bool _isLeftDiverse = false)
     {
         begin = _begin;
         end = _end;
         parent = _parent;
+        originalPathFirstChar = _originalPathFirstChar;
+        isLeftDiverse = _isLeftDiverse;
     }
+
 };
 
 struct InnerNodeDepth
@@ -80,7 +84,10 @@ public:
      */
     std::string GetLongestRepeatedSubstring() const;
 
-    //GetMaximalRepetitions
+    /**
+     * @return Vector of strings containing the maximal repetitions in the original string.
+     */
+    std::vector<std::string> GetMaximalRepetitions() const;
 
     /**
      * Prints this Compact Suffix Tree in a LaTex-friendly format.

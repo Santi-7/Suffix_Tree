@@ -37,7 +37,7 @@ CompactTreeNode* CompactSuffixTree::GetCompactTree(TreeNode* node, CompactTreeNo
     }
     end = node->charPosition;
     // Create the compact node
-    newNode = new CompactTreeNode(begin, end, parent);
+    newNode = new CompactTreeNode(begin, end, parent,0);
     if (node->children.size() > 0)
     {
         mDepthInfo.emplace_back(newNode, depth + (end - begin));
@@ -68,6 +68,7 @@ string CompactSuffixTree::GetLongestRepeatedSubstring() const
 void CompactSuffixTree::Print()
 {
     PrintFromNode(mRootNode);
+    cout << endl;
 }
 
 void CompactSuffixTree::PrintFromNode(CompactTreeNode* node)
@@ -108,7 +109,7 @@ void CompactSuffixTree::PrintFromNode(CompactTreeNode* node)
 CompactSuffixTree::CompactSuffixTree(const std::string& str, bool fast)
 {
     mStoredString = '$' + str + '$';
-    mRootNode = new CompactTreeNode(-1,-1, nullptr);
+    mRootNode = new CompactTreeNode(-1,-1, nullptr, 0);
     for (int i = 1; i < mStoredString.size()-1; ++i)
     {
         Insert(mRootNode, i, i);
@@ -139,17 +140,23 @@ void CompactSuffixTree::Insert(CompactTreeNode* root, const int from, const int 
     if (childIndex == -1)
     {
         // The new node is a new child of root
-        CompactTreeNode* newNode = new CompactTreeNode(from, (int)mStoredString.size() - 1, root);
+        CompactTreeNode* newNode = new CompactTreeNode(from, (int)mStoredString.size() - 1, root, pathFirstChar);
         root->children.push_back(newNode);
     }
     else if (insertingBefore->begin+fitting > insertingBefore->end)
     {
+        if (!insertingBefore->isLeftDiverse and
+                mStoredString[insertingBefore->originalPathFirstChar - 1] != mStoredString[pathFirstChar-1])
+            insertingBefore->isLeftDiverse = true;
         Insert(insertingBefore, from + fitting, pathFirstChar);
     }
     else
     {
         // The new node shares part of the inner node [insertingBefore]
-        CompactTreeNode* newNode = new CompactTreeNode(from, from + fitting - 1 , root);
+        CompactTreeNode* newNode =
+                new CompactTreeNode(from, from + fitting - 1 , root, pathFirstChar,
+                        insertingBefore->isLeftDiverse or
+                                mStoredString[pathFirstChar-1] != mStoredString[insertingBefore->originalPathFirstChar - 1]);
         mDepthInfo.emplace_back(newNode, from + fitting - pathFirstChar);
         insertingBefore->begin += fitting;
         insertingBefore->parent = newNode;
@@ -157,6 +164,21 @@ void CompactSuffixTree::Insert(CompactTreeNode* root, const int from, const int 
         Insert(newNode, from + fitting, pathFirstChar);
         newNode->children.push_back(insertingBefore);
     }
+}
+
+std::vector<std::string> CompactSuffixTree::GetMaximalRepetitions() const
+{
+    vector<string> retVal;
+    for (const InnerNodeDepth& depthInfo : mDepthInfo)
+    {
+        if (depthInfo.node->isLeftDiverse and depthInfo.node != mRootNode)
+        {
+            unsigned long a = (unsigned long) depthInfo.node->originalPathFirstChar;
+            unsigned long b = (unsigned long) depthInfo.node->end;
+            retVal.push_back(mStoredString.substr(a,b-a+1));
+        }
+    }
+    return retVal;
 }
 
 

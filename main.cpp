@@ -31,13 +31,13 @@ tuple<long int, string> timeLongestSubstring(const CompactSuffixTree& tree)
     return make_tuple(duration_cast<microseconds>(t2-t1).count(), retVal);
 }
 
-/*tuple<long int, vector<string>> timeMaximalRepetitions(const CompactSuffixTree& tree)
+tuple<long int, vector<string>> timeMaximalRepetitions(const CompactSuffixTree& tree)
 {
     high_resolution_clock::time_point t1 = high_resolution_clock::now();
-    //vector<string> retVal = tree.GetMaximalRepetitions();
+    vector<string> retVal = tree.GetMaximalRepetitions();
     high_resolution_clock::time_point t2 = high_resolution_clock::now();
     return make_tuple(duration_cast<microseconds>(t2-t1).count(), retVal);
-}*/
+}
 
 void PrintUsage()
 {
@@ -85,7 +85,8 @@ int main(int argc, char *argv[])
         }
         if (getMaximals)
         {
-
+            auto maximals = timeMaximalRepetitions(tree);
+            maximalsTime = get<0>(maximals);
         }
         if (print)
         {
@@ -96,7 +97,7 @@ int main(int argc, char *argv[])
     }
     else
     {
-        CompactSuffixTree tree (input, false);
+        CompactSuffixTree tree (input, true);
         if (getLongest)
         {
             auto longest = timeLongestSubstring(tree);
@@ -105,11 +106,16 @@ int main(int argc, char *argv[])
         if (getMaximals)
         {
             cout << "The maximals are: " << endl ;
+            vector<string> maximals = tree.GetMaximalRepetitions();
+            for (int i = 0; i < maximals.size()-1; ++i)
+            {
+                cout << maximals[i] << ", ";
+            }
+            cout << maximals.back() << endl;
         }
         if (print)
         {
             tree.Print();
-            cout << endl;
         }
     }
 }
