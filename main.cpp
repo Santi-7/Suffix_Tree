@@ -119,11 +119,14 @@ int main(int argc, char *argv[])
         {
             cout << "The maximals are: " << endl ;
             vector<string> maximals = tree.GetMaximalRepetitions();
-            for (int i = 0; i < maximals.size()-1; ++i)
+            if (maximals.size() != 0)
             {
-                cout << maximals[i] << ", ";
+                for (int i = 0; i < maximals.size()-1; ++i)
+                {
+                    cout << maximals[i] << ", ";
+                }
+                cout << maximals.back() << endl;
             }
-            cout << maximals.back() << endl;
         }
         if (print)
         {

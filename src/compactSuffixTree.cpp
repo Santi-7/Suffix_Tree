@@ -64,6 +64,7 @@ CompactTreeNode* CompactSuffixTree::GetCompactTree(TreeNode* node, CompactTreeNo
 
 string CompactSuffixTree::GetLongestRepeatedSubstring() const
 {
+    if (mDepthInfo.size() == 0) return "";
     string tmp;
     CompactTreeNode* tmpNode = mDepthInfo.front().node;
     int currDepth = mDepthInfo.front().depth;
@@ -80,8 +81,9 @@ string CompactSuffixTree::GetLongestRepeatedSubstring() const
 
 void CompactSuffixTree::Print()
 {
+    cout << "\\begin{forest}\n";
     PrintFromNode(mRootNode);
-    cout << endl;
+    cout << "\n\\end{forest}\n";
 }
 
 void CompactSuffixTree::PrintFromNode(CompactTreeNode* node)
@@ -89,6 +91,10 @@ void CompactSuffixTree::PrintFromNode(CompactTreeNode* node)
     if (node->children.size() == 0)
     {
         cout << "[";
+        if (mStoredString[node->originalPathFirstChar-1] == '$') cout << "\\$";
+        else cout << mStoredString[node->originalPathFirstChar-1];
+        if (node->isLeftDiverse) cout << '+';
+        else cout << '-';
         for (int i = node->begin; i <= node->end; ++i)
         {
             if (mStoredString[i] == '$')
@@ -102,6 +108,10 @@ void CompactSuffixTree::PrintFromNode(CompactTreeNode* node)
     else
     {
         cout << "[";
+        if (mStoredString[node->originalPathFirstChar-1] == '$') cout << "\\$";
+        else cout << mStoredString[node->originalPathFirstChar-1];
+        if (node->isLeftDiverse) cout << '+';
+        else cout << '-';
         for (int i = node->begin; i <= node->end; ++i)
         {
             if (mStoredString[i] == '$')
@@ -162,8 +172,8 @@ void CompactSuffixTree::Insert(CompactTreeNode* root, const int from, const int 
         insertingBefore->begin += fitting;
         insertingBefore->parent = newNode;
         root->children[childIndex] = newNode;
-        Insert(newNode, from + fitting, pathFirstChar);
         newNode->children.push_back(insertingBefore);
+        Insert(newNode, from + fitting, pathFirstChar);
     }
 }
 
