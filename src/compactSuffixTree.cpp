@@ -17,21 +17,16 @@ CompactSuffixTree::CompactSuffixTree(const std::string& str, Constructor constru
     mStoredString = '$' + str + '$';
     if (constructor == NLOGN)
     {
-        mRootNode = new CompactTreeNode(-1,-1, nullptr, 0);
+        mRootNode = new CompactTreeNode(-1,-1, 0);
         for (int i = 1; i < mStoredString.size()-1; ++i)
         {
             Insert(mRootNode, i, i);
         }
-        sort(mDepthInfo.begin(), mDepthInfo.end(),
-                [](const InnerNodeDepth& a, const InnerNodeDepth& b ) -> bool{return a.depth > b.depth;});
     }
     else if (constructor == N2)
     {
         SuffixTree baseTree(mStoredString);
-        mRootNode = GetCompactTree(baseTree.GetRoot(), nullptr, 0);
-        // Sort the node depth vector to have the deepest node first.
-        sort(mDepthInfo.begin(), mDepthInfo.end(),
-                [](const InnerNodeDepth& a, const InnerNodeDepth& b ) -> bool{return a.depth > b.depth;});
+        mRootNode = GetCompactTree(baseTree.GetRoot(), 0);
     }
 }
 
@@ -39,7 +34,7 @@ CompactSuffixTree::CompactSuffixTree(CompactTreeNode* &rootNode)
 : mRootNode(rootNode)
 {}
 
-CompactTreeNode* CompactSuffixTree::GetCompactTree(TreeNode* node, CompactTreeNode* parent, int depth)
+CompactTreeNode* CompactSuffixTree::GetCompactTree(TreeNode* node, int depth)
 {
     CompactTreeNode* newNode;
     int begin = node->charPosition, end;
@@ -50,33 +45,25 @@ CompactTreeNode* CompactSuffixTree::GetCompactTree(TreeNode* node, CompactTreeNo
     }
     end = node->charPosition;
     // Create the compact node
-    newNode = new CompactTreeNode(begin, end, parent, node->pathFirstChar, node->isLeftDiverse);
-    if (node->children.size() > 0)
+    newNode = new CompactTreeNode(begin, end, node->pathFirstChar, node->isLeftDiverse);
+    if (node->children.size() > 0 and node->isLeftDiverse)
     {
-        mDepthInfo.emplace_back(newNode, depth + (end - begin));
+        mMaximalNodes.push_back(newNode);
     }
     for (int i = 0; i < node->children.size(); ++i)
     {
-        newNode->children.push_back(GetCompactTree(node->children[i], newNode, depth + (end - begin) + 1));
+        newNode->children.push_back(GetCompactTree(node->children[i], depth + (end - begin) + 1));
     }
+    // Check if this inner node is deeper than the last recorded and if it is update the variable.
+    if (newNode->children.size() != 0) CheckInnerNode(newNode, depth + (end - begin));
     return newNode;
 }
 
 string CompactSuffixTree::GetLongestRepeatedSubstring() const
 {
-    if (mDepthInfo.size() == 0) return "";
-    string tmp;
-    CompactTreeNode* tmpNode = mDepthInfo.front().node;
-    int currDepth = mDepthInfo.front().depth;
-
-    tmp.reserve((unsigned int) currDepth);
-    while(tmpNode != nullptr && tmpNode->parent != nullptr)
-    {
-        unsigned int begin = (unsigned int) tmpNode->begin, size = (unsigned int)tmpNode->end - begin + 1;
-        tmp = mStoredString.substr(begin, size) + tmp;
-        tmpNode = tmpNode->parent;
-    }
-    return tmp;
+    unsigned long a = (unsigned long) get<0>(mLongestSubstring)->originalPathFirstChar;
+    unsigned long b = (unsigned long) get<0>(mLongestSubstring)->end;
+    return mStoredString.substr(a, b-a+1);
 }
 
 void CompactSuffixTree::Print()
@@ -151,7 +138,7 @@ void CompactSuffixTree::Insert(CompactTreeNode* root, const int from, const int 
     if (childIndex == -1)
     {
         // The new node is a new child of root
-        CompactTreeNode* newNode = new CompactTreeNode(from, (int)mStoredString.size() - 1, root, pathFirstChar);
+        CompactTreeNode* newNode = new CompactTreeNode(from, (int)mStoredString.size() - 1, pathFirstChar);
         root->children.push_back(newNode);
     }
     else if (insertingBefore->begin+fitting > insertingBefore->end)
@@ -165,12 +152,14 @@ void CompactSuffixTree::Insert(CompactTreeNode* root, const int from, const int 
     {
         // The new node shares part of the inner node [insertingBefore]
         CompactTreeNode* newNode =
-                new CompactTreeNode(from, from + fitting - 1 , root, pathFirstChar,
+                new CompactTreeNode(from, from + fitting - 1, pathFirstChar,
                         insertingBefore->isLeftDiverse or
                                 mStoredString[pathFirstChar-1] != mStoredString[insertingBefore->originalPathFirstChar - 1]);
-        mDepthInfo.emplace_back(newNode, from + fitting - pathFirstChar);
+        // If the new node is left diverse it represents a maximal repetition.
+        if (newNode->isLeftDiverse) mMaximalNodes.push_back(newNode);
+        CheckInnerNode(newNode, from + fitting - pathFirstChar);
+        // Set the old inner node as a child of this new node and not of the root.
         insertingBefore->begin += fitting;
-        insertingBefore->parent = newNode;
         root->children[childIndex] = newNode;
         newNode->children.push_back(insertingBefore);
         Insert(newNode, from + fitting, pathFirstChar);
@@ -180,15 +169,13 @@ void CompactSuffixTree::Insert(CompactTreeNode* root, const int from, const int 
 std::vector<std::string> CompactSuffixTree::GetMaximalRepetitions() const
 {
     vector<string> retVal;
-    for (const InnerNodeDepth& depthInfo : mDepthInfo)
+    for (const CompactTreeNode* node : mMaximalNodes)
     {
-        if (depthInfo.node->isLeftDiverse and depthInfo.node != mRootNode)
-        {
-            unsigned long a = (unsigned long) depthInfo.node->originalPathFirstChar;
-            unsigned long b = (unsigned long) depthInfo.node->end;
-            retVal.push_back(mStoredString.substr(a,b-a+1));
-        }
+        unsigned long a = (unsigned long) node->originalPathFirstChar;
+        unsigned long b = (unsigned long) node->end;
+        retVal.push_back(mStoredString.substr(a, b-a+1));
     }
+    // Sorted to be able to compare the results from the NLOGN and N2 constructors.
     sort(retVal.begin(), retVal.end());
     return retVal;
 }
@@ -196,4 +183,12 @@ std::vector<std::string> CompactSuffixTree::GetMaximalRepetitions() const
 CompactSuffixTree::~CompactSuffixTree()
 {
     delete mRootNode;
+}
+
+void CompactSuffixTree::CheckInnerNode(CompactTreeNode *innerNode, int depth)
+{
+    if (depth > get<1>(mLongestSubstring))
+    {
+        mLongestSubstring = make_tuple(innerNode, depth);
+    }
 }

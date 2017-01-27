@@ -23,9 +23,6 @@ struct CompactTreeNode
     /** Value of this node. */
     int begin, end;
 
-    /** Pointe to the parent node. */
-    CompactTreeNode* parent;
-
     /** True if this node is left-diverse. */
     bool isLeftDiverse = false;
 
@@ -35,11 +32,10 @@ struct CompactTreeNode
     std::vector<CompactTreeNode*> children;
 
     /** Simple constructor. */
-    CompactTreeNode(int _begin, int _end, CompactTreeNode* _parent, int _originalPathFirstChar = 0, bool _isLeftDiverse = false)
+    CompactTreeNode(int _begin, int _end, int _originalPathFirstChar = 0, bool _isLeftDiverse = false)
     {
         begin = _begin;
         end = _end;
-        parent = _parent;
         originalPathFirstChar = _originalPathFirstChar;
         isLeftDiverse = _isLeftDiverse;
     }
@@ -49,17 +45,6 @@ struct CompactTreeNode
         for (CompactTreeNode* child : children) delete child;
     }
 
-};
-
-struct InnerNodeDepth
-{
-    CompactTreeNode* node;
-    int depth;
-    InnerNodeDepth(CompactTreeNode* _node, int _depth)
-    {
-        node = _node;
-        depth = _depth;
-    }
 };
 
 class CompactSuffixTree
@@ -112,8 +97,11 @@ private:
     /** String represented by the suffix tree. */
     std::string mStoredString;
 
-    /** Vector cantaining all inner nodes and their depths. Useful to find the longest repetition in linear time. */
-    std::vector<InnerNodeDepth> mDepthInfo;
+    /** Vector that contains a vector with all maximal inner nodes in it. */
+    std::vector<CompactTreeNode*> mMaximalNodes;
+
+    /** Tuple that contains a pointer to the node that represents the longest repeated substring in the tree.*/
+    std::tuple<CompactTreeNode*, int> mLongestSubstring;
 
     /**
      * Constructs a CompactTreeNode hierarchy from a non-compact TreeNode. When the new root node created is not a leaf
@@ -123,7 +111,7 @@ private:
      * @param depth Distance from the root to the new subtree root node that will be returned.
      * @return Pointer to the root of the compact subtree that corresponds with the TreeNode node.
      */
-    CompactTreeNode* GetCompactTree(TreeNode* node, CompactTreeNode* parent, int depth);
+    CompactTreeNode* GetCompactTree(TreeNode* node, int depth);
 
     /**
      * Inserts a new suffix in the tree while keeping it compact.
@@ -140,6 +128,13 @@ private:
      * @param node root node from which it will be printed
      */
     void PrintFromNode(CompactTreeNode* node);
+
+    /**
+     * Updates the longest substring variable if necessary.
+     * @param innerNode A new inner node in the tree.
+     * @param depth Depth of the new node.
+     */
+    void CheckInnerNode(CompactTreeNode* innerNode, int depth);
 };
 
 #endif // SUFFIX_TREE_COMPACTSUFFIXTREE_HPP
