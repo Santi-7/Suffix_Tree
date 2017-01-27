@@ -14,10 +14,10 @@
 using namespace std;
 using namespace std::chrono;
 
-tuple<long int, CompactSuffixTree> timeConstruction(string& parameter, Constructor strategy)
+tuple<long int, CompactSuffixTree*> timeConstruction(string& parameter, Constructor strategy)
 {
     high_resolution_clock::time_point t1 = high_resolution_clock::now();
-    CompactSuffixTree tmp(parameter, strategy);
+    CompactSuffixTree* tmp = new CompactSuffixTree(parameter, strategy);
     high_resolution_clock::time_point t2 = high_resolution_clock::now();
     return make_tuple(duration_cast<microseconds>(t2-t1).count(), tmp);
 }
@@ -78,7 +78,6 @@ int main(int argc, char *argv[])
     }
 
     // Input string.
-    cout << "Input: ";
     string input;
     getline(cin, input);
 
@@ -86,18 +85,18 @@ int main(int argc, char *argv[])
     if (time)
     {
         auto result = timeConstruction(input, strategy);
-        CompactSuffixTree tree(get<1>(result));
+        CompactSuffixTree* tree(get<1>(result));
         long int treeBuildTime = get<0>(result);
         long int longestSubstrTime = 0L;
         long int maximalsTime = 0L;
         if (getLongest)
         {
-            auto longest = timeLongestSubstring(tree);
+            auto longest = timeLongestSubstring(*tree);
             longestSubstrTime = get<0>(longest);
         }
         if (getMaximals)
         {
-            auto maximals = timeMaximalRepetitions(tree);
+            auto maximals = timeMaximalRepetitions(*tree);
             maximalsTime = get<0>(maximals);
         }
         cout << treeBuildTime << ' ' << longestSubstrTime << ' ' << maximalsTime << endl;
