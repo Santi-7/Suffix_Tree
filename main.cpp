@@ -13,6 +13,7 @@
 
 using namespace std;
 using namespace std::chrono;
+using namespace std::experimental;
 
 tuple<long int, CompactSuffixTree*> timeConstruction(string& parameter, Constructor strategy)
 {
@@ -30,10 +31,10 @@ tuple<long int, string> timeLongestSubstring(const CompactSuffixTree& tree)
     return make_tuple(duration_cast<microseconds>(t2-t1).count(), retVal);
 }
 
-tuple<long int, vector<string>> timeMaximalRepetitions(const CompactSuffixTree& tree)
+tuple<long int, vector<string_view>> timeMaximalRepetitions(const CompactSuffixTree& tree)
 {
     high_resolution_clock::time_point t1 = high_resolution_clock::now();
-    vector<string> retVal = tree.GetMaximalRepetitions();
+    vector<string_view> retVal = tree.GetMaximalRepetitions();
     high_resolution_clock::time_point t2 = high_resolution_clock::now();
     return make_tuple(duration_cast<microseconds>(t2-t1).count(), retVal);
 }
@@ -100,6 +101,7 @@ int main(int argc, char *argv[])
             maximalsTime = get<0>(maximals);
         }
         cout << treeBuildTime << ' ' << longestSubstrTime << ' ' << maximalsTime << endl;
+        delete tree;
     }
     else
     {
@@ -111,7 +113,7 @@ int main(int argc, char *argv[])
         if (getMaximals)
         {
             cout << "The maximals are: " << endl ;
-            vector<string> maximals = tree.GetMaximalRepetitions();
+            vector<string_view> maximals = tree.GetMaximalRepetitions();
             if (maximals.size() != 0)
             {
                 for (int i = 0; i < maximals.size()-1; ++i)

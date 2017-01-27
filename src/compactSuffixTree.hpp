@@ -15,6 +15,7 @@
 
 #include <string>
 #include <vector>
+#include <experimental/string_view>
 
 enum Constructor {NLOGN, N2};
 
@@ -82,7 +83,7 @@ public:
     /**
      * @return Vector of strings containing the maximal repetitions in the original string.
      */
-    std::vector<std::string> GetMaximalRepetitions() const;
+    std::vector<std::experimental::string_view> GetMaximalRepetitions() const;
 
     /**
      * Prints this Compact Suffix Tree in a LaTex-friendly format.

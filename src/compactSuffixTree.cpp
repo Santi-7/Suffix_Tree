@@ -11,6 +11,7 @@
 #include <iostream>
 
 using namespace std;
+using namespace std::experimental;
 
 CompactSuffixTree::CompactSuffixTree(const std::string& str, Constructor constructor)
 {
@@ -173,17 +174,16 @@ void CompactSuffixTree::Insert(CompactTreeNode* root, const int from, const int 
     }
 }
 
-std::vector<std::string> CompactSuffixTree::GetMaximalRepetitions() const
+std::vector<string_view> CompactSuffixTree::GetMaximalRepetitions() const
 {
-    vector<string> retVal;
+    vector<string_view> retVal;
+    string_view tmp(mStoredString.c_str(), mStoredString.size());
     for (const CompactTreeNode* node : mMaximalNodes)
     {
         unsigned long a = (unsigned long) node->originalPathFirstChar;
         unsigned long b = (unsigned long) node->end;
-        retVal.push_back(mStoredString.substr(a, b-a+1));
+        retVal.push_back(tmp.substr(a, b-a+1));
     }
-    // Sorted to be able to compare the results from the NLOGN and N2 constructors.
-    sort(retVal.begin(), retVal.end());
     return retVal;
 }
 
