@@ -14,6 +14,7 @@ using namespace std;
 SuffixTree::SuffixTree(const string &str)
 {
     mRootNode = new TreeNode(-1);
+    mStoredString = str;
     // Constructs the tree with all the suffixes of the input string.
     // From 1 in order to don't save the path $ ... $
     for (unsigned int i = 1; i < str.size()-1; ++i)
@@ -41,7 +42,7 @@ TreeNode* SuffixTree::GetRoot() const
     return mRootNode;
 }
 
-pair<unsigned int, TreeNode*> SuffixTree::GetActiveNode(const int from, const string& str,
+pair<unsigned int, TreeNode*> SuffixTree::GetActiveNode(const int from, const string &str,
                                                         const char leftSymbol) const
 {
     // Return values.
@@ -62,8 +63,7 @@ pair<unsigned int, TreeNode*> SuffixTree::GetActiveNode(const int from, const st
         // Current node has an edge with the current char examined.
         if (currentNode->HasEdge(str[from+pathIndex], currentNode, str))
         {
-            if (previousNode->pathFirstChar != leftSymbol)
-                previousNode->willBeLeftDiverse = true;
+            previousNode->DecideLeftDiverse(leftSymbol, mStoredString);
             pathIndex++;
         }
         else break;

@@ -28,8 +28,6 @@ struct TreeNode
     /** A left symbol of a node, saved to determine if it's a left-diverse node. With just
      * one symbol we can already decide if it's a left-diverse node. */
     int pathFirstChar = LEFT_SYMBOL_SENTINEL;
-    /** True if the node will be left diverse if a bifurcation occurrs. */
-    bool willBeLeftDiverse = false;
 
     TreeNode(int _charPosition)
     {
@@ -82,7 +80,7 @@ struct TreeNode
      */
     void DecideLeftDiverse(const int firstChar, const std::string& str)
     {
-        if (willBeLeftDiverse | str[this->pathFirstChar - 1] != str[firstChar-1])
+        if (str[this->pathFirstChar - 1] != str[firstChar-1])
             isLeftDiverse = true;
     }
 };
@@ -116,6 +114,9 @@ private:
 
     /** Root node of the suffix tree. */
     TreeNode* mRootNode;
+
+    /** String represented by the suffix tree. */
+    std::string mStoredString;
 
     /**
      * @param str String to look for its maximum prefix.
