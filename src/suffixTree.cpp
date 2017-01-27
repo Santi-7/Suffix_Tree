@@ -14,7 +14,6 @@ using namespace std;
 SuffixTree::SuffixTree(const string &str)
 {
     mRootNode = new TreeNode(-1);
-    mStoredString = str;
     // Constructs the tree with all the suffixes of the input string.
     // From 1 in order to don't save the path $ ... $
     for (unsigned int i = 1; i < str.size()-1; ++i)
