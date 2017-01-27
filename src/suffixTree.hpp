@@ -115,16 +115,11 @@ private:
     /** Root node of the suffix tree. */
     TreeNode* mRootNode;
 
-    /** String represented by the suffix tree. */
-    std::string mStoredString;
-
     /**
      * @param str String to look for its maximum prefix.
-     * @param leftSymbol Left Symbol of the new substring.
      * @return the node and path degree of the maximum shared prefix with [str].
      */
-    std::pair<unsigned int, TreeNode*> GetActiveNode(const int from, const std::string &str,
-                                                     const char leftSymbol) const;
+    std::pair<unsigned int, TreeNode*> GetActiveNode(const int from, const std::string &str) const;
 };
 
 #endif // SUFFIX_TREE_SUFFIXTREE_HPP
