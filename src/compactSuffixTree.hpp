@@ -101,7 +101,7 @@ private:
     std::vector<CompactTreeNode*> mMaximalNodes;
 
     /** Tuple that contains a pointer to the node that represents the longest repeated substring in the tree.*/
-    std::tuple<CompactTreeNode*, int> mLongestSubstring;
+    std::tuple<CompactTreeNode*, int> mLongestSubstring = std::make_tuple(nullptr, 0);
 
     /**
      * Constructs a CompactTreeNode hierarchy from a non-compact TreeNode. When the new root node created is not a leaf
