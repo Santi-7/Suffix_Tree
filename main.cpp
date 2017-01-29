@@ -52,7 +52,7 @@ void PrintUsage()
             "\t-l : get the longest repeated substring in the input string.\n"
             "\t-m : get all the maximal repetitions in the input string.\n"
             "\t--nlogn : default algorithm, builds the compact suffix tree directly from the input string.\n"
-            "\t--n2 : builds the compact suffix tree from an auxiliary extended tree."
+            "\t--n2 : builds the compact suffix tree from an auxiliary extended tree.\n"
             "\t--print : print the suffix tree in a LaTeX-friendly format.\n"
             "\t--time : override behaviour to get the time it takes to run each of the selected options of the program.\n"
             "\tThe format for the --time option is:\n"
