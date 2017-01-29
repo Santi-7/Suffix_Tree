@@ -40,11 +40,25 @@ tuple<long int, vector<string_view>> timeMaximalRepetitions(const CompactSuffixT
 }
 
 /**
- * Prints the usage of the program.
+ * Prints an usage message on how to use this program.
  */
 void PrintUsage()
 {
-    cout << "Usage: " << endl;
+    cout << "Usage: ./Repeticiones [OPTION]... \n"
+            "\tWhen the command starts type the string you want to build the tree and get information about.\n"
+            "\tOptionally you can just redirect a file to stdin or use a pipe.\n"
+            "\n"
+            "Options:\n"
+            "\t-l : get the longest repeated substring in the input string.\n"
+            "\t-m : get all the maximal repetitions in the input string.\n"
+            "\t--nlogn : default algorithm, builds the compact suffix tree directly from the input string.\n"
+            "\t--n2 : builds the compact suffix tree from an auxiliary extended tree."
+            "\t--print : print the suffix tree in a LaTeX-friendly format.\n"
+            "\t--time : override behaviour to get the time it takes to run each of the selected options of the program.\n"
+            "\tThe format for the --time option is:\n"
+            "\t\t tree_build_time longest_substring_time maximal_repetitions_time\n"
+            "\tKeep in mind that time will always be measured for the tree build but not so for the other options, those have to be manually selected.\n"
+            "\tAll time is measured in microseconds.\n";
 }
 
 int main(int argc, char *argv[])
