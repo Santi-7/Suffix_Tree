@@ -1,6 +1,7 @@
 /* ---------------------------------------------------------------------------
 ** main.cpp
-** TODO: Add doc.
+** Simple program that uses suffix trees to get largest and maximal repetitions
+** from strings. It has a simple interface to benchmark and debug its behaviour.
 **
 ** Author: Miguel Jorge Galindo Ramos, NIA: 679954
 **         Santiago Gil Begué, NIA: 683482
