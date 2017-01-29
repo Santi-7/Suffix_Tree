@@ -57,7 +57,7 @@ void PrintUsage()
             "\t--print : print the suffix tree in a LaTeX-friendly format.\n"
             "\t--time : override behaviour to get the time it takes to run each of the selected options of the program.\n"
             "\tThe format for the --time option is:\n"
-            "\t\t tree_build_time longest_substring_time maximal_repetitions_time\n"
+            "\t\t tree_build_time longest_repetition_time maximal_repetitions_time\n"
             "\tKeep in mind that time will always be measured for the tree build but not so for the other options, those have to be manually selected.\n"
             "\tAll time is measured in microseconds.\n";
 }
@@ -123,7 +123,7 @@ int main(int argc, char *argv[])
         CompactSuffixTree tree (input, strategy);
         if (getLongest)
         {
-            cout << "The longest substring is: " << tree.GetLongestRepeatedSubstring() << endl;
+            cout << "The longest repetition is: " << tree.GetLongestRepeatedSubstring() << endl;
         }
         if (getMaximals)
         {
